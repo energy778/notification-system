@@ -1,0 +1,5 @@
+application:
+  unavailable-url-prefix: /out-of-area
+  ping-url: localhost:8082/ping
+logging:
+  level.ru: debug
