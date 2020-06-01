@@ -11,6 +11,8 @@ import ru.veretennikov.notificationsystem.dto.Notification;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
 @Slf4j
@@ -40,9 +42,11 @@ public class NotificationServiceImpl implements NotificationService {
 //        System.out.println(timeInstant.atZone(ZoneId.of("Asia/Yekaterinburg")).toLocalDateTime());
 //        System.out.println(timeInstant.atZone(ZoneId.of("Australia/Brisbane")).toLocalDateTime());
 
+        ZonedDateTime zonedDateTime = timeInstant.atZone(timeZone);
+
         String template = messageSource
                 .getMessage("message.notification",
-                        new Object[] {request.getMsisdnB(), timeInstant.atZone(timeZone).toLocalDateTime()},
+                        new Object[] {request.getMsisdnB(), zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("hh:mm:ss  dd MMMM yyyy").toFormatter())},
                         locale);
 
         Notification notification = new Notification();
@@ -50,12 +54,18 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setMsisdnB(request.getMsisdnA());
         notification.setText(template);
 
-        client.post()
-                .body(BodyInserters.fromValue(notification))
-                .exchange()
-                .doOnError(throwable -> log.error(throwable.getMessage()))
-                .subscribe()      // ?
-        ;
+        int curHour = zonedDateTime.getHour();
+        if (curHour >= 9 && curHour <= 22)
+            client.post()
+                    .body(BodyInserters.fromValue(notification))
+                    .exchange()
+                    .doOnError(throwable -> log.error(throwable.getMessage()))
+                    .subscribe()      // ?
+            ;
+        else
+//            FIXME
+            log.debug(String.format("Сейчас %s. Сообщение будет отправлено в следующее временное окно",
+                    zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("dd MMMM yyyy, hh:mm:ss, zzzz").toFormatter())));
 
     }
 

@@ -37,7 +37,7 @@ public class PingServiceImpl implements PingService {
     public void ping(UnvlbReq request) {
 
         String abonent = request.getMsisdnB();
-        log.debug("пингуем абонента {}", abonent);
+        log.debug("ping to {}", abonent);
 
         client.post()
                 .uri(uriBuilder -> uriBuilder.queryParam(MSISDN, abonent).build())
