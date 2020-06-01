@@ -8,6 +8,7 @@ import ru.veretennikov.notificationsystem.domain.UnvlbReq;
 import ru.veretennikov.notificationsystem.dto.AbonentStatus;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
 
 import static ru.veretennikov.notificationsystem.dto.PingStatus.IN_NETWORK;
 import static ru.veretennikov.notificationsystem.dto.PingStatus.UNAVAILABLE_SUBSCRIBER;
@@ -69,7 +70,7 @@ public class PingServiceImpl implements PingService {
             this.ping(request);
         }
         else if (IN_NETWORK.equals(abonentStatus.getStatus()))
-            notificationService.startNotify(request);
+            notificationService.startNotify(request, ZonedDateTime.now().toInstant());
 
     }
 

@@ -25,7 +25,7 @@ public class UrlUnavailableHandler {
 
         return request.bodyToMono(UnvlbReq.class)
                 .map(unvlbReq -> {
-                    log.debug("from: {}, to: {}", unvlbReq.getMsisdnA(), unvlbReq.getMsisdnB());
+                    log.debug("from {} to {}", unvlbReq.getMsisdnA(), unvlbReq.getMsisdnB());
                     pingService.ping(unvlbReq);
                     return unvlbReq;
                 })
