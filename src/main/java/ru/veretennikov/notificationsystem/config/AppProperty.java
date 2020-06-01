@@ -12,4 +12,5 @@ import org.springframework.stereotype.Component;
 public class AppProperty {
     private String unavailableUrlPrefix;
     private String pingUrl;
+    private int pingSleepInMinutes;
 }
