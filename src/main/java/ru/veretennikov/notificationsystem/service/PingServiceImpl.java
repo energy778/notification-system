@@ -58,7 +58,7 @@ public class PingServiceImpl implements PingService {
 
     private void afterResponse(UnvlbReq request, AbonentStatus abonentStatus) {
 
-        if (UNAVAILABLE_SUBSCRIBER.getName().equals(abonentStatus.getStatus())){
+        if (UNAVAILABLE_SUBSCRIBER.equals(abonentStatus.getStatus())){
 //            FIXME
 //            scheduleService.startSchedule(request);
             try {
@@ -68,7 +68,7 @@ public class PingServiceImpl implements PingService {
             }
             this.ping(request);
         }
-        else if (IN_NETWORK.getName().equals(abonentStatus.getStatus()))
+        else if (IN_NETWORK.equals(abonentStatus.getStatus()))
             notificationService.startNotify(request);
 
     }

@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class AbonentStatus {
-//    private PingStatus status;        // не взлетела сериализация сразу в enum
-    private String status;
+    private PingStatus status;
 }
