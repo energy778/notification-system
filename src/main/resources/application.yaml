@@ -1,6 +1,8 @@
 application:
   unavailable-url-prefix: /out-of-area
   ping-url: http://localhost:8081/ping
+#  notify-url: http://sms-service/send-sms
+  notify-url: http://localhost:8081/send-sms
   ping-sleep-in-minutes: 15
 
 logging:

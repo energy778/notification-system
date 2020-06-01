@@ -64,7 +64,7 @@ public class PingServiceImpl implements PingService {
             try {
                 Thread.sleep(appProperty.getPingSleepInMinutes() *1000 *60);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
             this.ping(request);
         }
