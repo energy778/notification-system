@@ -1,6 +1,6 @@
 package ru.veretennikov.notificationsystem.service;
 
-import ru.veretennikov.notificationsystem.domain.UnvlbReq;
+import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 
 import java.time.Instant;
 

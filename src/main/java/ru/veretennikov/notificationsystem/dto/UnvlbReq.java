@@ -1,4 +1,4 @@
-package ru.veretennikov.notificationsystem.domain;
+package ru.veretennikov.notificationsystem.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

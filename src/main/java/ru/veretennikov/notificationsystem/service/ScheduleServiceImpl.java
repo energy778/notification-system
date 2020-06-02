@@ -2,7 +2,7 @@ package ru.veretennikov.notificationsystem.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.veretennikov.notificationsystem.domain.UnvlbReq;
+import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 
 @Slf4j
 @Service

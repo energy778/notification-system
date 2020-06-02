@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import ru.veretennikov.notificationsystem.domain.UnvlbReq;
+import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 import ru.veretennikov.notificationsystem.service.PingService;
 
 import static org.springframework.http.MediaType.TEXT_PLAIN;

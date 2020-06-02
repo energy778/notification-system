@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.veretennikov.notificationsystem.config.AppProperty;
-import ru.veretennikov.notificationsystem.domain.UnvlbReq;
 import ru.veretennikov.notificationsystem.dto.Notification;
+import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -19,19 +19,23 @@ import java.util.Locale;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-    private final Locale defLocale;
-    private final WebClient client;
+//    private final ProfileService profileService;
     private final MessageSource messageSource;
     private final ZoneId defTimeZone;
+    private final Locale defLocale;
+    private final WebClient client;
 
-    public NotificationServiceImpl(AppProperty appProperty, MessageSource messageSource) {
-        this.defLocale = new Locale(appProperty.getDefaultNotifyLanguage(), appProperty.getDefaultNotifyCountry());
+    public NotificationServiceImpl(AppProperty appProperty, MessageSource messageSource
+//                                   , ProfileService profileService
+    ) {
+//        this.profileService = profileService;
         this.messageSource = messageSource;
+//        this.defTimeZone = ZoneId.of("Australia/Brisbane");
+        this.defTimeZone = ZoneId.systemDefault();
+        this.defLocale = new Locale(appProperty.getDefaultNotifyLanguage(), appProperty.getDefaultNotifyCountry());
         this.client = WebClient.builder()
                 .baseUrl(appProperty.getNotifyUrl())
                 .build();
-//        this.defTimeZone = ZoneId.of("Australia/Brisbane");
-        this.defTimeZone = ZoneId.systemDefault();
     }
 
     @Override
@@ -42,6 +46,13 @@ public class NotificationServiceImpl implements NotificationService {
 //        System.out.println(timeInstant.atZone(ZoneId.systemDefault()).toLocalDateTime());
 //        System.out.println(timeInstant.atZone(ZoneId.of("Asia/Yekaterinburg")).toLocalDateTime());
 //        System.out.println(timeInstant.atZone(ZoneId.of("Australia/Brisbane")).toLocalDateTime());
+
+////        Mono<Profile> next = profileService.getProfileByPhoneNumber(request.getMsisdnA())
+//        Mono<Profile> next = profileService.getAllProfiles()
+//                .doOnError(throwable -> log.error(throwable.getMessage()))
+//                .next();
+//        next.log().subscribe();
+////        System.out.println(profile);
 
         Locale curLocale = defLocale;
         ZoneId curTimeZone = this.defTimeZone;

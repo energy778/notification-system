@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.veretennikov.notificationsystem.config.AppProperty;
-import ru.veretennikov.notificationsystem.domain.UnvlbReq;
+import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 import ru.veretennikov.notificationsystem.dto.AbonentStatus;
 
 import java.time.Duration;
