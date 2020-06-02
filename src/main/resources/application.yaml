@@ -4,8 +4,8 @@ application:
 #  notify-url: http://sms-service/send-sms
   notify-url: http://localhost:8081/send-sms
   ping-sleep-in-minutes: 15
-  notify-language: ru
-  notify-country: RU
+  default-notify-language: ru
+  default-notify-country: RU
 
 logging:
   level.ru: debug

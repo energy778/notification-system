@@ -14,6 +14,6 @@ public class AppProperty {
     private String pingUrl;
     private String notifyUrl;
     private int pingSleepInMinutes;
-    private String notifyLanguage;
-    private String notifyCountry;
+    private String defaultNotifyLanguage;
+    private String defaultNotifyCountry;
 }

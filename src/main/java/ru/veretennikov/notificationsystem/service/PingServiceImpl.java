@@ -45,13 +45,6 @@ public class PingServiceImpl implements PingService {
                 .timeout(Duration.ofDays(3))        // пингуем не дольше 3 суток
                 .flatMap(clientResponse -> clientResponse.bodyToMono(AbonentStatus.class))
                 .doOnError(throwable -> log.error(throwable.getMessage()))
-//                .map(abonentStatus -> {
-//                    if (UNAVAILABLE_SUBSCRIBER.equals(abonentStatus.getStatus()))
-//                        scheduleService.startSchedule(request);
-//                    else if (IN_NETWORK.equals(abonentStatus.getStatus()))
-//                        notificationService.startNotify(request);
-//                    return abonentStatus;
-//                })
                 .subscribe(abonentStatus -> this.afterResponse(request, abonentStatus))
         ;
 

@@ -19,35 +19,40 @@ import java.util.Locale;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-    private final Locale locale;
+    private final Locale defLocale;
     private final WebClient client;
     private final MessageSource messageSource;
+    private final ZoneId defTimeZone;
 
     public NotificationServiceImpl(AppProperty appProperty, MessageSource messageSource) {
-        this.locale = new Locale(appProperty.getNotifyLanguage(), appProperty.getNotifyCountry());
+        this.defLocale = new Locale(appProperty.getDefaultNotifyLanguage(), appProperty.getDefaultNotifyCountry());
         this.messageSource = messageSource;
         this.client = WebClient.builder()
                 .baseUrl(appProperty.getNotifyUrl())
                 .build();
+//        this.defTimeZone = ZoneId.of("Australia/Brisbane");
+        this.defTimeZone = ZoneId.systemDefault();
     }
 
     @Override
     public void startNotify(UnvlbReq request, Instant timeInstant) {
 
-        log.debug("уведомляем {} о том, что {} появился в сети", request.getMsisdnA(), request.getMsisdnB());
+        log.debug("{} is available, notify {}", request.getMsisdnB(), request.getMsisdnA());
 
-        // TODO: 01.06.2020 пока для примера
-        ZoneId timeZone = ZoneId.of("Australia/Brisbane");
 //        System.out.println(timeInstant.atZone(ZoneId.systemDefault()).toLocalDateTime());
 //        System.out.println(timeInstant.atZone(ZoneId.of("Asia/Yekaterinburg")).toLocalDateTime());
 //        System.out.println(timeInstant.atZone(ZoneId.of("Australia/Brisbane")).toLocalDateTime());
 
-        ZonedDateTime zonedDateTime = timeInstant.atZone(timeZone);
+        Locale curLocale = defLocale;
+        ZoneId curTimeZone = this.defTimeZone;
+        // TODO: 02.06.2020 получаем настройки из профиля
+
+        ZonedDateTime zonedDateTime = timeInstant.atZone(curTimeZone);
 
         String template = messageSource
                 .getMessage("message.notification",
-                        new Object[] {request.getMsisdnB(), zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("hh:mm:ss  dd MMMM yyyy").toFormatter())},
-                        locale);
+                        new Object[] {request.getMsisdnB(), zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("hh:mm:ss dd MMMM yyyy").toFormatter())},
+                        curLocale);
 
         Notification notification = new Notification();
         notification.setMsisdnA(request.getMsisdnB());
@@ -64,8 +69,8 @@ public class NotificationServiceImpl implements NotificationService {
             ;
         else
 //            FIXME
-            log.debug(String.format("Сейчас %s. Сообщение будет отправлено в следующее временное окно",
-                    zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("dd MMMM yyyy, hh:mm:ss, zzzz").toFormatter())));
+            log.debug(String.format("now %s. Message will be sent to the next time window",
+                    zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("dd MMMM yyyy hh:mm:ss, zzzz").toFormatter())));
 
     }
 
