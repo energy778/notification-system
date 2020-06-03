@@ -5,9 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import ru.veretennikov.notificationsystem.config.AppProperty;
-import ru.veretennikov.notificationsystem.domain.Profile;
 import ru.veretennikov.notificationsystem.dto.Notification;
 import ru.veretennikov.notificationsystem.dto.UnvlbReq;
 
@@ -48,10 +46,13 @@ public class NotificationServiceImpl implements NotificationService {
 //        System.out.println(timeInstant.atZone(ZoneId.of("Australia/Brisbane")).toLocalDateTime());
 
 //        Mono<Profile> next = profileService.getProfileByPhoneNumber(request.getMsisdnA())
-        Mono<Profile> next = profileService.getAllProfiles()
+        profileService.getAllProfiles()
                 .doOnError(throwable -> log.error(throwable.getMessage()))
-                .next();
-        next.log().subscribe();
+                .map(profile -> {
+                    log.debug(profile.toString());
+                    return profile;
+                })
+                .subscribe();
 //        System.out.println(profile);
 
         Locale curLocale = defLocale;
