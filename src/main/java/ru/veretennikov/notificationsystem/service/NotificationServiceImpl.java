@@ -5,6 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import ru.veretennikov.notificationsystem.config.AppProperty;
 import ru.veretennikov.notificationsystem.dto.Notification;
 import ru.veretennikov.notificationsystem.dto.UnvlbReq;
@@ -41,35 +42,44 @@ public class NotificationServiceImpl implements NotificationService {
 
         log.debug("{} is available, notify {}", request.getMsisdnB(), request.getMsisdnA());
 
-//        System.out.println(timeInstant.atZone(ZoneId.systemDefault()).toLocalDateTime());
-//        System.out.println(timeInstant.atZone(ZoneId.of("Asia/Yekaterinburg")).toLocalDateTime());
-//        System.out.println(timeInstant.atZone(ZoneId.of("Australia/Brisbane")).toLocalDateTime());
-
-//        Mono<Profile> next = profileService.getProfileByPhoneNumber(request.getMsisdnA())
-        profileService.getAllProfiles()
+        profileService.getProfileByPhoneNumber(request.getMsisdnA())
                 .doOnError(throwable -> log.error(throwable.getMessage()))
                 .map(profile -> {
                     log.debug(profile.toString());
-                    return profile;
+                    Locale locale;
+                    ZoneId timeZone;
+                    if (profile.getLang() == null)
+                        locale = defLocale;
+                    else
+                        locale = new Locale(profile.getLang(), profile.getCountry() == null ? "" : profile.getCountry());
+                    if (profile.getTimeZone() == null)
+                        timeZone = defTimeZone;
+                    else
+                        timeZone = ZoneId.of(profile.getTimeZone());
+                    return this.sendNotification(request, timeInstant, locale, timeZone);
+                })
+                .switchIfEmpty(result -> {
+                    log.debug("No profile in DB with phone number of {}. Use default profile", request.getMsisdnA());
+                    Mono.just(this.sendNotification(request, timeInstant, defLocale, defTimeZone));
                 })
                 .subscribe();
-//        System.out.println(profile);
 
-        Locale curLocale = defLocale;
-        ZoneId curTimeZone = this.defTimeZone;
-        // TODO: 02.06.2020 получаем настройки из профиля
+    }
 
-        ZonedDateTime zonedDateTime = timeInstant.atZone(curTimeZone);
+    private Notification sendNotification(UnvlbReq request, Instant timeInstant, Locale locale, ZoneId timeZone) {
 
-        String template = messageSource
+        ZonedDateTime zonedDateTime = timeInstant.atZone(timeZone);
+
+        String textMessage = messageSource
                 .getMessage("message.notification",
                         new Object[] {request.getMsisdnB(), zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("hh:mm:ss dd MMMM yyyy").toFormatter())},
-                        curLocale);
+                        locale);
 
-        Notification notification = new Notification();
-        notification.setMsisdnA(request.getMsisdnB());
-        notification.setMsisdnB(request.getMsisdnA());
-        notification.setText(template);
+        Notification notification = Notification.builder()
+                .msisdnA(request.getMsisdnB())
+                .msisdnB(request.getMsisdnA())
+                .text(textMessage)
+                .build();
 
         int curHour = zonedDateTime.getHour();
         if (curHour >= 9 && curHour <= 22)
@@ -77,12 +87,13 @@ public class NotificationServiceImpl implements NotificationService {
                     .body(BodyInserters.fromValue(notification))
                     .exchange()
                     .doOnError(throwable -> log.error(throwable.getMessage()))
-                    .subscribe()      // ?
-            ;
+                    .subscribe();
         else
 //            FIXME
             log.debug(String.format("now %s. Message will be sent to the next time window",
                     zonedDateTime.format(new DateTimeFormatterBuilder().appendPattern("dd MMMM yyyy hh:mm:ss, zzzz").toFormatter())));
+
+        return notification;
 
     }
 
