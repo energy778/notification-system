@@ -5,4 +5,3 @@ CREATE TABLE IF NOT EXISTS profile (
     country VARCHAR(50),
     time_zone VARCHAR(100)
 );
-insert into profile VALUES ( 1, '6715275', 'en', '', 'Australia/Brisbane' );

@@ -25,6 +25,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
+<!--			<groupId>org.springframework.data</groupId>-->
+<!--			<artifactId>spring-data-r2dbc</artifactId>-->
 		</dependency>
 
 		<dependency>
@@ -33,11 +35,21 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+
+
+<!--		<dependency>-->
+<!--			<groupId>com.h2database</groupId>-->
+<!--			<artifactId>h2</artifactId>-->
+<!--&lt;!&ndash;			<scope>runtime</scope>&ndash;&gt;-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework</groupId>-->
+<!--			<artifactId>spring-jdbc</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-core</artifactId>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -75,6 +87,22 @@
 			<scope>test</scope>
 		</dependency>
 
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot.experimental</groupId>-->
+<!--			<artifactId>spring-boot-starter-data-r2dbc</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>io.r2dbc</groupId>-->
+<!--			<artifactId>r2dbc-h2</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot.experimental</groupId>-->
+<!--			<artifactId>spring-boot-test-autoconfigure-r2dbc</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+
 	</dependencies>
 
 	<build>
@@ -85,5 +113,25 @@
 			</plugin>
 		</plugins>
 	</build>
+
+<!--	<dependencyManagement>-->
+<!--		<dependencies>-->
+<!--			<dependency>-->
+<!--				<groupId>org.springframework.boot.experimental</groupId>-->
+<!--				<artifactId>spring-boot-bom-r2dbc</artifactId>-->
+<!--				<version>0.1.0.M3</version>-->
+<!--				<type>pom</type>-->
+<!--				<scope>import</scope>-->
+<!--			</dependency>-->
+<!--		</dependencies>-->
+<!--	</dependencyManagement>-->
+
+<!--	<repositories>-->
+<!--		<repository>-->
+<!--			<id>spring-milestones</id>-->
+<!--			<name>Spring Milestones</name>-->
+<!--			<url>https://repo.spring.io/milestone</url>-->
+<!--		</repository>-->
+<!--	</repositories>-->
 
 </project>
